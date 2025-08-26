@@ -1,4 +1,45 @@
 #include <stdio.h>
+#include <stdlib.h> // Para abs()
+
+// Função para aplicar área de efeito tipo cone (triângulo invertido)
+void aplicarCone(int tabuleiro[10][10], int origem_linha, int origem_coluna) {
+    for (int i = 0; i < 3; i++) { // Altura do cone
+        for (int j = -i; j <= i; j++) { // Largura do cone
+            int linha = origem_linha + i;
+            int coluna = origem_coluna + j;
+            if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 10 && tabuleiro[linha][coluna] == 0) {
+                tabuleiro[linha][coluna] = 5;
+            }
+        }
+    }
+}
+
+// Função para aplicar área de efeito tipo cruz
+void aplicarCruz(int tabuleiro[10][10], int origem_linha, int origem_coluna) {
+    for (int i = -2; i <= 2; i++) {
+        if (origem_linha + i >= 0 && origem_linha + i < 10 && tabuleiro[origem_linha + i][origem_coluna] == 0) {
+            tabuleiro[origem_linha + i][origem_coluna] = 5;
+        }
+        if (origem_coluna + i >= 0 && origem_coluna + i < 10 && tabuleiro[origem_linha][origem_coluna + i] == 0) {
+            tabuleiro[origem_linha][origem_coluna + i] = 5;
+        }
+    }
+}
+
+// Função para aplicar área de efeito tipo octaedro (losango)
+void aplicarOctaedro(int tabuleiro[10][10], int origem_linha, int origem_coluna) {
+    for (int i = -2; i <= 2; i++) {
+        for (int j = -2; j <= 2; j++) {
+            if (abs(i) + abs(j) <= 2) {
+                int linha = origem_linha + i;
+                int coluna = origem_coluna + j;
+                if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 10 && tabuleiro[linha][coluna] == 0) {
+                    tabuleiro[linha][coluna] = 5;
+                }
+            }
+        }
+    }
+}
 
 int main(void) {
     // Matriz 10x10 inicializada com água (valor 0)
@@ -10,19 +51,16 @@ int main(void) {
     int navio3[3] = {3, 3, 3}; // Navio diagonal principal (↘)
     int navio4[3] = {3, 3, 3}; // Navio diagonal secundária (↙)
 
-    // Navio horizontal: linha fixa, coluna variável
+    // Coordenadas iniciais dos navios
     int linha_navio_horizontal = 2;
     int coluna_navio_horizontal = 4;
 
-    // Navio vertical: coluna fixa, linha variável
     int linha_navio_vertical = 5;
     int coluna_navio_vertical = 7;
 
-    // Navio diagonal principal: linha e coluna crescem juntas
     int linha_navio_diag1 = 0;
     int coluna_navio_diag1 = 0;
 
-    // Navio diagonal secundária: linha cresce, coluna decresce
     int linha_navio_diag2 = 0;
     int coluna_navio_diag2 = 9;
 
@@ -46,36 +84,33 @@ int main(void) {
         tabuleiro[linha_navio_diag2 + i][coluna_navio_diag2 - i] = navio4[i];
     }
 
+    // Aplica habilidades especiais
+    aplicarCone(tabuleiro, 6, 2);       // Cone com origem em (6,2)
+    aplicarCruz(tabuleiro, 4, 4);       // Cruz com origem em (4,4)
+    aplicarOctaedro(tabuleiro, 8, 8);   // Octaedro com origem em (8,8)
+
     // Cabeçalho do Tabuleiro
-    // Letras das colunas (A-J) e números das linhas (1-10)
     char coordenadas_A[10] = {'A','B','C','D','E','F','G','H','I','J'};
     int coordenadas_B[10]  = {1,2,3,4,5,6,7,8,9,10};
 
     // Impressão do Tabuleiro
     printf("===== Tabuleiro =====\n");
-
-    // Imprime cabeçalho com letras
     printf("    ");
     for (int i = 0; i < 10; i++) {
-        printf(" %1c", coordenadas_A[i]);
+        printf(" %c", coordenadas_A[i]);
     }
+    printf("\n    --------------------\n");
 
-    // Linha separadora
-    printf("\n    ");
-    printf("--------------------\n");
-
-    // Imprime matriz do tabuleiro com números das linhas
     for (int i = 0; i < 10; i++) {
         printf("%2d |", coordenadas_B[i]);
         for (int j = 0; j < 10; j++) {
-            printf("%2d", tabuleiro[i][j]);
+            printf(" %d", tabuleiro[i][j]);
         }
         printf("\n");
     }
 
     return 0;
 }
-
 /*
 Desafio: nível novato
 Posicionando Navios no Tabuleiro
@@ -146,4 +181,38 @@ e dois em diagonais (↘ e ↙).
 * Coordenadas dos navios são definidas diretamente no código.
 * Validação de sobreposição é simplificada.
 * Não há lógica de ataque ou acerto neste nível.
+
+Desafio: Nível Mestre
+Habilidades Especiais e Áreas de Efeito
+Neste desafio final, você adicionará habilidades especiais ao jogo, com áreas de efeito visuais sobre o tabuleiro.
+
+1 - O que você vai fazer:
+* Manter o tabuleiro 10x10 como base.
+* Criar três matrizes de habilidade (5x5 ou 7x7) para representar:
+  - Cone: forma triangular expandindo para baixo.
+  - Cruz: linhas central horizontal e vertical.
+  - Octaedro: formato de losango (diamante).
+* Definir um ponto de origem para cada habilidade no tabuleiro.
+* Sobrepor as matrizes de habilidade ao tabuleiro, marcando as áreas afetadas com o valor 5.
+* Exibir o tabuleiro com símbolos distintos:
+  - Água (0)
+  - Navio (3)
+  - Área de habilidade (5)
+
+2 - Requisitos funcionais:
+* Matrizes de habilidade com valores 0 e 1.
+* Ponto de origem definido diretamente no código.
+* Sobreposição dinâmica com loops aninhados e condicionais.
+* Impressão clara do tabuleiro com os efeitos visuais.
+
+3 - Requisitos não funcionais:
+* Execução eficiente.
+* Código bem documentado, explicando a lógica das áreas de efeito.
+* Legibilidade com nomes descritivos e estrutura organizada.
+
+4 - Simplificações:
+* Tamanho fixo das matrizes de habilidade.
+* Sem entrada do usuário.
+* Sem lógica de dano ou interação com navios.
+* Validação de limites simplificada.
 */
