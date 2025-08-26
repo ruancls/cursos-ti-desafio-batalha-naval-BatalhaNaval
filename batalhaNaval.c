@@ -1,46 +1,70 @@
 #include <stdio.h>
 
 int main(void) {
-    // Matriz do tabuleiro (10x10), inicializada com água (0)
+    // Matriz 10x10 inicializada com água (valor 0)
     int tabuleiro[10][10] = {0};
 
-    // Representação dos navios (3 posições cada um)
+    // Cada navio ocupa 3 posições
     int navio1[3] = {3, 3, 3}; // Navio horizontal
     int navio2[3] = {3, 3, 3}; // Navio vertical
+    int navio3[3] = {3, 3, 3}; // Navio diagonal principal (↘)
+    int navio4[3] = {3, 3, 3}; // Navio diagonal secundária (↙)
 
-    // Coordenadas iniciais dos navios
-    int linha_navio_horizontal = 2; // Linha 2
-    int coluna_navio_horizontal = 4; // Começa na coluna 4
+    // Navio horizontal: linha fixa, coluna variável
+    int linha_navio_horizontal = 2;
+    int coluna_navio_horizontal = 4;
 
-    int linha_navio_vertical = 5; // Começa na linha 5
-    int coluna_navio_vertical = 7; // Coluna 7
+    // Navio vertical: coluna fixa, linha variável
+    int linha_navio_vertical = 5;
+    int coluna_navio_vertical = 7;
 
-    // Posicionando navio horizontal
+    // Navio diagonal principal: linha e coluna crescem juntas
+    int linha_navio_diag1 = 0;
+    int coluna_navio_diag1 = 0;
+
+    // Navio diagonal secundária: linha cresce, coluna decresce
+    int linha_navio_diag2 = 0;
+    int coluna_navio_diag2 = 9;
+
+    // Posiciona navio horizontal (↔)
     for (int i = 0; i < 3; i++) {
         tabuleiro[linha_navio_horizontal][coluna_navio_horizontal + i] = navio1[i];
     }
 
-    // Posicionando navio vertical
+    // Posiciona navio vertical (↕)
     for (int i = 0; i < 3; i++) {
         tabuleiro[linha_navio_vertical + i][coluna_navio_vertical] = navio2[i];
     }
 
-    // Coordenadas das linhas e colunas
+    // Posiciona navio diagonal principal (↘)
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[linha_navio_diag1 + i][coluna_navio_diag1 + i] = navio3[i];
+    }
+
+    // Posiciona navio diagonal secundária (↙)
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[linha_navio_diag2 + i][coluna_navio_diag2 - i] = navio4[i];
+    }
+
+    // Cabeçalho do Tabuleiro
+    // Letras das colunas (A-J) e números das linhas (1-10)
     char coordenadas_A[10] = {'A','B','C','D','E','F','G','H','I','J'};
     int coordenadas_B[10]  = {1,2,3,4,5,6,7,8,9,10};
 
+    // Impressão do Tabuleiro
     printf("===== Tabuleiro =====\n");
 
-    // Cabeçalho com letras (colunas)
+    // Imprime cabeçalho com letras
     printf("    ");
     for (int i = 0; i < 10; i++) {
         printf(" %1c", coordenadas_A[i]);
     }
 
+    // Linha separadora
     printf("\n    ");
     printf("--------------------\n");
 
-    // Exibição do tabuleiro
+    // Imprime matriz do tabuleiro com números das linhas
     for (int i = 0; i < 10; i++) {
         printf("%2d |", coordenadas_B[i]);
         for (int j = 0; j < 10; j++) {
@@ -88,4 +112,38 @@ Dica: Imprima um espaço ou outro caractere separador entre os elementos da matr
 * As coordenadas dos navios são definidas diretamente no código, sem input do usuário.
 * Não é necessário implementar a lógica do jogo (ataques, acertos, etc.) neste nível.
 * A validação de sobreposição de navios pode ser simplificada.
+
+Desafio: nível aventureiro
+Tabuleiro Completo e Navios Diagonais
+
+Neste desafio, o programa simula um tabuleiro de Batalha Naval com quatro navios posicionados: dois em direções tradicionais (horizontal e vertical) 
+e dois em diagonais (↘ e ↙).
+
+1 - O que o programa faz:
+* Representa o tabuleiro com uma matriz 10x10, inicializada com o valor 0 (água).
+* Declara quatro navios, cada um com tamanho fixo de 3 posições.
+* Posiciona os navios no tabuleiro:
+  - Navio 1: horizontal (linha fixa, coluna variável).
+  - Navio 2: vertical (coluna fixa, linha variável).
+  - Navio 3: diagonal principal (linha e coluna crescem juntas).
+  - Navio 4: diagonal secundária (linha cresce, coluna decresce).
+* Preenche as posições dos navios com o valor 3.
+* Exibe o tabuleiro completo no console, com cabeçalho de coordenadas e visualização clara das posições ocupadas.
+
+2 - Requisitos funcionais atendidos:
+* Utiliza matriz 10x10 para representar o tabuleiro.
+* Posiciona quatro navios, incluindo dois diagonais.
+* Garante que os navios estejam dentro dos limites do tabuleiro.
+* Exibe o tabuleiro com os navios corretamente posicionados.
+
+3 - Requisitos não funcionais atendidos:
+* Performance eficiente, sem atrasos perceptíveis.
+* Código bem documentado, com comentários explicativos em cada etapa.
+* Legibilidade mantida com nomes de variáveis descritivos e indentação consistente.
+
+4 - Simplificações aplicadas:
+* Tamanho do tabuleiro e dos navios é fixo.
+* Coordenadas dos navios são definidas diretamente no código.
+* Validação de sobreposição é simplificada.
+* Não há lógica de ataque ou acerto neste nível.
 */
